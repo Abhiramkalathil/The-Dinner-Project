@@ -1,0 +1,820 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Dinner Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#ECEEF3; --surface:#FFFFFF; --surface-2:#F5F6F9; --ink:#1B1F2E; --muted:#5D6478; --line:#DCE0E8;
+  --accent:#34408C; --accent-ink:#FFFFFF; --accent-soft:#E3E6F6;
+  --warm:#9C5A06; --warm-bg:#FBEAD0; --warm-line:#EBC58E;
+  --good:#1D6F47; --good-bg:#DCF0E4; --bad:#A8231B; --bad-bg:#F8E0DD;
+  --gold:#7A5A00; --gold-bg:#F6EBC4;
+  --art-bg:#E6E3EC;
+  --shadow:0 1px 2px rgba(27,31,46,.06),0 8px 24px rgba(27,31,46,.07);
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Figtree",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10121A; --surface:#1A1D28; --surface-2:#222634; --ink:#E8EAF1; --muted:#9BA1B5; --line:#2E3345;
+    --accent:#8F9CF2; --accent-ink:#141726; --accent-soft:#272C47;
+    --warm:#F2B45A; --warm-bg:#3A2B14; --warm-line:#6A4B1C;
+    --good:#6FCF9B; --good-bg:#183327; --bad:#F08A80; --bad-bg:#3D1C1A;
+    --gold:#E9C866; --gold-bg:#3A3217;
+    --art-bg:#2A2E3E;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10121A; --surface:#1A1D28; --surface-2:#222634; --ink:#E8EAF1; --muted:#9BA1B5; --line:#2E3345;
+  --accent:#8F9CF2; --accent-ink:#141726; --accent-soft:#272C47;
+  --warm:#F2B45A; --warm-bg:#3A2B14; --warm-line:#6A4B1C;
+  --good:#6FCF9B; --good-bg:#183327; --bad:#F08A80; --bad-bg:#3D1C1A;
+  --gold:#E9C866; --gold-bg:#3A3217;
+  --art-bg:#2A2E3E;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 48px}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.label{font-size:11.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+
+.topbar{max-width:1360px;margin:0 auto;padding-block:18px 14px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.brand h1{font-size:22px;font-weight:700}
+.brand .tag{font-size:12.5px;color:var(--muted)}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:7px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.clock{max-width:1360px;margin:0 auto 18px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:10px 14px}
+.clock .now{font-family:var(--mono);font-weight:600;font-size:14px}
+.clock .btns{display:flex;flex-wrap:wrap;gap:6px}
+.chipbtn{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:4px 10px;font-size:12.5px;font-weight:600}
+.chipbtn:hover{border-color:var(--accent)}
+.clock .note{font-size:12.5px;color:var(--muted);flex-basis:100%;margin:0}
+
+.stage{max-width:1360px;margin:0 auto;display:grid;gap:24px;align-items:start}
+.stage.both{grid-template-columns:minmax(0,400px) minmax(0,1fr)}
+@media (max-width:1100px){.stage.both{grid-template-columns:minmax(0,1fr)}}
+.stage .col-member{justify-self:center;width:100%;max-width:400px}
+.stage.only-member .col-kitchen,.stage.only-kitchen .col-member{display:none}
+.colhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+
+/* Art */
+.art{display:block;width:100%;height:100%;object-fit:cover}
+.thumb{width:72px;height:56px;border-radius:10px;overflow:hidden;flex:none;background:var(--art-bg)}
+.hero{border-radius:16px;overflow:hidden;aspect-ratio:16/10;max-width:100%;background:var(--art-bg);position:relative}
+.hero .cap{position:absolute;left:8px;bottom:8px;font-size:11px;font-weight:600;background:rgba(20,22,30,.62);color:#fff;border-radius:6px;padding:2px 7px}
+
+/* Phone */
+.phone{background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);overflow:clip}
+.ph-head{padding:18px 18px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ph-head .logo{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:-.01em}
+.ph-head .logo span{color:var(--accent)}
+.ph-head .hi{font-size:13px;color:var(--muted)}
+.ph-sticky{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--surface);padding:0 12px 10px;display:grid;gap:8px;border-bottom:1px solid var(--line)}
+.banner{border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.banner.warm{background:var(--warm-bg);border:1px solid var(--warm-line);color:var(--warm)}
+.banner.good{background:var(--good-bg);color:var(--good)}
+.banner.calm{background:var(--accent-soft);color:var(--accent)}
+.banner.bad{background:var(--bad-bg);color:var(--bad)}
+.banner .cd{font-family:var(--mono);font-weight:600;font-size:16px}
+.banner .t{font-size:13px;line-height:1.35}
+.banner .act{border:0;border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:700;background:var(--ink);color:var(--surface)}
+.banner .act.ghost{background:transparent;color:inherit;text-decoration:underline}
+.ph-tabs{display:flex;gap:4px;background:var(--surface-2);border-radius:10px;padding:3px}
+.ph-tabs button{flex:1;border:0;background:none;border-radius:8px;padding:6px;font-size:13px;font-weight:600;color:var(--muted)}
+.ph-tabs button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.ph-body{padding:16px 16px 22px;display:grid;gap:18px}
+.day-h h2{font-size:21px}
+.day-h p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.group{display:grid;gap:8px}
+.group-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.dish{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--surface)}
+.dish:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.dish.blocked{opacity:.72;background:var(--surface-2)}
+.dish .info{display:grid;gap:3px;min-width:0}
+.dish label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.dish.blocked label{cursor:not-allowed}
+.dish input{margin-top:3px;accent-color:var(--accent);flex:none}
+.dish .nm{font-weight:700;font-size:14.5px;line-height:1.3}
+.dish .meta{font-size:12.5px;color:var(--muted)}
+.none-opt{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--muted);padding:2px 4px;cursor:pointer}
+.none-opt input{accent-color:var(--accent)}
+.linkish{border:0;background:none;padding:0;color:var(--accent);font-weight:700;font-size:12.5px;justify-self:start;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.pills{display:flex;flex-wrap:wrap;gap:4px}
+.pill{white-space:nowrap;display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 8px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.pill.bad{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.pill.good{background:var(--good-bg);color:var(--good);border-color:transparent}
+.pill.warm{background:var(--warm-bg);color:var(--warm);border-color:transparent}
+.pill.acc{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.pill.gold{background:var(--gold-bg);color:var(--gold);border-color:transparent}
+.incl{font-size:13px;background:var(--surface-2);border-radius:12px;padding:10px 12px;display:grid;gap:4px}
+.incl b{font-weight:700}
+.extra{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:8px}
+.extra .thumb{width:56px;height:44px;border-radius:8px}
+.extra .nm{font-weight:600;font-size:14px;line-height:1.3}
+.extra .sub{font-size:12px;color:var(--muted)}
+.extra.excl{border-color:var(--gold-bg);background:linear-gradient(0deg,var(--surface),var(--surface))}
+.step{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;overflow:hidden;flex:none}
+.step button{border:0;background:var(--surface-2);width:30px;height:30px;font-weight:700}
+.step button:disabled{opacity:.35;cursor:not-allowed}
+.step span{min-width:26px;text-align:center;font-family:var(--mono);font-weight:600}
+.field{display:grid;gap:5px}
+.field label,.field .lab{font-size:13px;font-weight:600}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);min-width:0}
+textarea{resize:vertical;min-height:60px}
+.summary{border-top:1px solid var(--line);padding-top:14px;display:grid;gap:8px}
+.summary .line{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.summary .line span:last-child{flex:none}
+.btn{border:0;border-radius:12px;padding:12px 14px;font-weight:700;font-size:15px;background:var(--accent);color:var(--accent-ink);width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sec{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.btn.small{width:auto;padding:7px 12px;font-size:13.5px;border-radius:10px}
+.btn.danger{background:var(--bad-bg);color:var(--bad)}
+.linkbtn{border:0;background:none;color:var(--bad);font-weight:600;font-size:13.5px;padding:4px 0;text-decoration:underline}
+.skip{font-size:13px;color:var(--muted);margin:0;background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.skip b{color:var(--ink)}
+.empty{border:1px dashed var(--line);border-radius:14px;padding:18px;text-align:center;color:var(--muted);font-size:14px}
+.olist{display:grid;gap:10px}
+.ocard{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:4px}
+.ocard .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ocard .dt{font-weight:700}
+.kv{display:grid;grid-template-columns:minmax(0,120px) minmax(0,1fr);gap:8px 12px;font-size:14px;margin:0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+
+/* Dish detail */
+.detail{display:grid;gap:14px}
+.back{border:0;background:none;padding:0;font-weight:700;color:var(--accent);justify-self:start;font-size:14px}
+.nutri{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.nutri div{background:var(--surface-2);border-radius:12px;padding:8px 10px}
+.nutri .v{font-family:var(--display);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums}
+.detail h3{font-size:15px;margin-bottom:4px}
+.detail p{margin:0;font-size:14px}
+.detail ol{margin:0;padding-left:20px;font-size:14px;display:grid;gap:4px}
+
+/* Kitchen portal */
+.portal{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:clip;min-width:0}
+.p-head{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.p-head h2{font-size:19px}
+.p-tabs{display:flex;gap:4px;flex-wrap:wrap}
+.p-tabs button{border:1px solid transparent;background:none;border-radius:9px;padding:7px 12px;font-weight:600;font-size:14px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+.p-tabs button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.p-tabs .count{font-family:var(--mono);font-size:11.5px;background:var(--warm-bg);color:var(--warm);border-radius:999px;padding:0 6px}
+.p-body{padding:18px 20px 24px;display:grid;gap:20px;min-width:0}
+.dates{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.dchip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 12px;text-align:left;display:grid;gap:2px;min-width:118px}
+.dchip[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.dchip .d{font-weight:700;font-size:14px}
+.dchip .s{font-size:11.5px;color:var(--muted)}
+.phase{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.phase::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.phase.hidden{background:var(--surface-2);color:var(--muted)}
+.phase.open{background:var(--warm-bg);color:var(--warm)}
+.phase.cooking{background:var(--accent-soft);color:var(--accent)}
+.phase.delivered{background:var(--good-bg);color:var(--good)}
+.dchip .phase{justify-self:start;font-size:10.5px;padding:1px 7px}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat{background:var(--surface-2);border-radius:12px;padding:12px 14px}
+.stat .v{font-family:var(--display);font-weight:700;font-size:26px;font-variant-numeric:tabular-nums}
+.sec-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.sec-h h3{font-size:16px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--surface-2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td .big{font-family:var(--mono);font-weight:600;font-size:17px}
+td.dishcell{min-width:190px}
+tr.is-new td{background:var(--warm-bg)}
+tr.is-new td:first-child{box-shadow:inset 3px 0 0 var(--warm)}
+.status{min-width:150px;padding:6px 8px;font-size:13px;font-weight:600}
+.grid2{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.form{border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px;background:var(--surface-2)}
+.form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:460px){.form .two{grid-template-columns:1fr}}
+.form fieldset{border:0;padding:0;margin:0;display:grid;gap:10px}
+.form legend{font-family:var(--display);font-weight:700;font-size:14px;margin-bottom:6px;padding:0}
+.allergen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:4px 10px;font-size:13px}
+.allergen-grid label{display:flex;gap:6px;align-items:center;font-weight:500}
+.checkline{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:600}
+.mdish{border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px}
+.mdish .top{display:flex;justify-content:space-between;gap:8px;align-items:start;flex-wrap:wrap}
+.mdish .acts{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.upl{color:var(--accent);font-weight:700;font-size:12.5px;text-decoration:underline;cursor:pointer}
+.photo-prev{display:flex;gap:10px;align-items:center;font-size:13px}
+.copybar{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.copybar .field{flex:1 1 180px}
+.err{color:var(--bad);font-size:13px;font-weight:600}
+.flag{color:var(--bad);font-weight:700}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;box-shadow:var(--shadow);z-index:20;max-width:calc(100% - 32px)}
+.inline-confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:8px 10px;font-size:13.5px;font-weight:600}
+@media (prefers-reduced-motion:no-preference){.dish,.btn,.dchip{transition:border-color .15s,background .15s,box-shadow .15s}}
+</style>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>The Dinner Project</h1>
+    <span class="tag">Prototype · example members and dishes · changes reset when you reload</span>
+  </div>
+  <div class="seg" role="group" aria-label="View">
+    <button id="v-both" data-act="view" data-v="both">Side by side</button>
+    <button id="v-member" data-act="view" data-v="member">Member app</button>
+    <button id="v-kitchen" data-act="view" data-v="kitchen">Kitchen portal</button>
+  </div>
+</header>
+
+<section class="clock" aria-label="Demo clock">
+  <span class="label">Demo clock</span>
+  <span class="now" id="clock-now"></span>
+  <div class="btns">
+    <button class="chipbtn" data-act="clock" data-c="-60">−1 hour</button>
+    <button class="chipbtn" data-act="clock" data-c="60">+1 hour</button>
+    <button class="chipbtn" data-act="clock" data-c="758">Jump to 7:58pm</button>
+    <button class="chipbtn" data-act="clock" data-c="1440">+1 day</button>
+    <button class="chipbtn" data-act="clock" data-c="reset">Reset</button>
+  </div>
+  <p class="note">Rule: members order tomorrow's dinner until 8pm today. At 8pm the app moves on to the next day's menu. The clock runs in real time from Fri 25 Sep, 7:40pm. Jump to 7:58pm to watch the switch.</p>
+</section>
+
+<main class="stage" id="stage">
+  <div class="col-member">
+    <div class="colhead"><span class="label">Member app · phone</span><span class="label">Signed in as Sophie</span></div>
+    <div class="phone" id="member"></div>
+  </div>
+  <div class="col-kitchen" style="min-width:0">
+    <div class="colhead"><span class="label">Kitchen portal · home PC</span></div>
+    <div class="portal" id="kitchen"></div>
+  </div>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- Time ---------- */
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const at=(s,h,m=0)=>{const[y,mo,d]=s.split('-').map(Number);return new Date(y,mo-1,d,h,m);};
+const addDays=(s,n)=>{const d=at(s,12);d.setDate(d.getDate()+n);return ymd(d);};
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],DOWL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const fmtDay=s=>{const d=at(s,12);return `${DOW[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;};
+const fmtDayLong=s=>{const d=at(s,12);return `${DOWL[d.getDay()]} ${d.getDate()} ${MONL[d.getMonth()]}`;};
+const fmtTime=d=>{let h=d.getHours(),m=d.getMinutes();const ap=h>=12?'pm':'am';h=h%12||12;return `${h}:${pad(m)}${ap}`;};
+const money=n=>'£'+n.toFixed(2);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const START=new Date(2026,8,25,19,40,0);
+let offset=START-Date.now();
+const now=()=>new Date(Date.now()+offset);
+
+/* Menu for delivery day D: visible from 8pm two days before, orders close 8pm the day before. */
+const opensAt=D=>at(addDays(D,-2),20);
+const closesAt=D=>at(addDays(D,-1),20);
+function phase(D,t=now()){if(t<opensAt(D))return'hidden';if(t<closesAt(D))return'open';if(t<at(D,20))return'cooking';return'delivered';}
+const PHASE_LABEL={hidden:'Hidden from members',open:'Open for orders',cooking:'Orders closed · cooking',delivered:'Delivered'};
+const orderDate=(t=now())=>addDays(ymd(t),t.getHours()>=20?2:1);
+const weekStart=s=>{const d=at(s,12);d.setDate(d.getDate()-((d.getDay()+6)%7));return ymd(d);};
+const daysBetween=(a,b)=>Math.round((at(b,12)-at(a,12))/86400000);
+const relDay=s=>{const n=daysBetween(ymd(now()),s);return n===0?'today':n===1?'tomorrow':fmtDay(s);};
+function countdown(to){let ms=Math.max(0,to-now());const h=Math.floor(ms/3600000);ms%=3600000;const m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000);return h>=24?`${Math.floor(h/24)}d ${h%24}h ${pad(m)}m`:`${h}h ${pad(m)}m ${pad(s)}s`;}
+function ago(ms){const m=Math.floor((now()-ms)/60000);if(m<1)return'just now';if(m<60)return m+' min ago';const h=Math.floor(m/60);return h<24?h+' h ago':Math.floor(h/24)+' d ago';}
+
+/* ---------- Data ---------- */
+const ALLERGENS=['Celery','Gluten','Crustaceans','Eggs','Fish','Lupin','Milk','Molluscs','Mustard','Tree nuts','Peanuts','Sesame','Soya','Sulphites'];
+const KITCHENS=['Home Kitchen (Indian)','Bangkok Lane (Thai partner)','Kyo Kitchen (Japanese partner)','Bought in'];
+const TYPES={main:'Main',dessert:'Dessert',drink:'Drink',snack:'Snack'};
+const STATUSES=['Received','Preparing','Packed','Out for delivery','Delivered'];
+let uid=100;const id=p=>p+(++uid);
+
+function D(o){return Object.assign({story:'',cuisine:'',diet:'',allergens:[],spice:false,exclusive:false,kcal:null,protein:null,ingredients:'',steps:[],good:'',history:'',max:30},o);}
+const dishes=[
+  D({id:'d1',date:'2026-09-22',type:'main',name:'Butter Chicken with Pilau Rice',kitchen:KITCHENS[0],cuisine:'Indian',allergens:['Milk'],spice:true,extraPrice:7.5,colors:['#F1DDA8','#D06A2E','#5B8C3A']}),
+  D({id:'d2',date:'2026-09-23',type:'main',name:'Vegetable Thai Red Curry',kitchen:KITCHENS[1],cuisine:'Thai',allergens:['Soya'],spice:true,extraPrice:7.5,colors:['#F5F1E6','#C8452B','#6E9E3F']}),
+  D({id:'d3',date:'2026-09-24',type:'main',name:'Keema Matar with Chapati',kitchen:KITCHENS[0],cuisine:'Indian',allergens:['Gluten','Milk'],spice:true,extraPrice:7.5,colors:['#E7C995','#8C4A26','#6FA044']}),
+  D({id:'d1a',date:'2026-09-22',type:'dessert',name:'Kheer',kitchen:KITCHENS[0],allergens:['Milk'],price:2.5}),
+  D({id:'d1b',date:'2026-09-22',type:'drink',name:'Sweet Lassi',kitchen:KITCHENS[0],allergens:['Milk'],price:2.5}),
+
+  // Saturday 26
+  D({id:'d10',date:'2026-09-26',type:'main',name:'Chicken Biryani',kitchen:KITCHENS[0],cuisine:'Indian',allergens:['Milk','Tree nuts'],spice:true,extraPrice:7.5,max:30,kcal:650,protein:34,colors:['#E9C46A','#B5562B','#5B8C3A'],
+    ingredients:'Basmati rice, chicken thigh, yoghurt, fried onions, saffron, mint, coriander, cashews, cardamom, cloves, cinnamon',
+    steps:['Chicken is marinated overnight in yoghurt, ginger, garlic and spices.','Basmati rice is part-boiled with whole spices.','Chicken and rice are layered with fried onions, mint and saffron milk.','The pot is sealed and cooked slowly so the rice steams in the chicken juices ("dum").'],
+    good:'A complete meal of protein and rice in one dish. It comes with cucumber raita to cool the spice.',
+    history:'Biryani is thought to have come to India with Persian and Mughal cooks. The Hyderabadi style, where marinated meat and rice cook together under a sealed lid, became famous in the kitchens of the Nizams of Hyderabad.'}),
+  D({id:'d11',date:'2026-09-26',type:'main',name:'Paneer Butter Masala with Jeera Rice',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegetarian',allergens:['Milk','Tree nuts'],spice:true,extraPrice:7,max:25,kcal:720,protein:24,colors:['#F3E6C4','#D2632B','#F7F3EA'],
+    ingredients:'Paneer, tomatoes, butter, cream, cashews, dried fenugreek leaves, garam masala, basmati rice, cumin seeds',
+    steps:['Tomatoes, onions and cashews are simmered and blended into a smooth sauce.','The sauce is finished with butter, cream and dried fenugreek.','Paneer cubes are lightly seared and folded in.','Served with basmati rice tempered with cumin seeds.'],
+    good:'Paneer is a vegetarian source of protein and calcium. This is one of our richer dishes, so a lighter dessert goes well with it.',
+    history:'The butter ("makhani") sauce is credited to the Moti Mahal restaurant in Delhi in the 1950s, where butter chicken was created. Paneer butter masala is the vegetarian version.'}),
+  D({id:'d12',date:'2026-09-26',type:'main',name:'Thai Green Chicken Curry with Jasmine Rice',kitchen:KITCHENS[1],cuisine:'Thai',allergens:['Fish'],spice:true,extraPrice:7.5,max:20,kcal:620,protein:30,colors:['#F5F1E6','#8FAF3C','#C23B22'],
+    ingredients:'Chicken, coconut milk, green curry paste (green chilli, lemongrass, galangal, lime leaf), Thai aubergine, Thai basil, fish sauce, jasmine rice',
+    steps:['Green curry paste is fried in thick coconut cream until fragrant.','Chicken and Thai aubergine are simmered in coconut milk.','Seasoned with fish sauce and palm sugar, then finished with Thai basil.','Served with steamed jasmine rice.'],
+    good:'Fragrant rather than heavy, with fresh herbs and vegetables. Choose mild if Thai chilli heat is new to you.',
+    history:'Green curry comes from central Thailand and is one of the younger Thai curries, appearing in cookbooks in the early 20th century. Its colour comes from fresh green chillies.'}),
+  D({id:'d13',date:'2026-09-26',type:'main',name:'Vegetable Pad Thai',kitchen:KITCHENS[1],cuisine:'Thai',diet:'Vegetarian',allergens:['Peanuts','Eggs','Soya'],spice:false,extraPrice:7,max:20,kcal:560,protein:16,colors:['#E3B96A','#C98A3E','#6E9E3F'],
+    ingredients:'Rice noodles, egg, tofu, beansprouts, spring onion, tamarind, palm sugar, soy sauce, crushed peanuts, lime',
+    steps:['Rice noodles are soaked until just soft.','Tofu and egg are stir-fried in a very hot wok.','Noodles are tossed with tamarind, palm sugar and soy sauce.','Finished with beansprouts, spring onion, peanuts and lime.'],
+    good:'Lighter than a curry and dairy-free. Contains peanuts.',
+    history:'Pad Thai was promoted by the Thai government in the 1930s and 40s as a national dish, to encourage people to eat rice noodles.'}),
+  D({id:'d30',date:'2026-09-26',type:'main',exclusive:true,name:'Malabar King Prawn Curry',kitchen:KITCHENS[0],cuisine:'Indian (Kerala)',allergens:['Crustaceans','Mustard'],spice:true,price:9.5,max:10,kcal:590,protein:28,colors:['#F5F1E6','#E08A3C','#F08A6A'],
+    ingredients:'King prawns, coconut milk, kokum, curry leaves, mustard seeds, green chilli, turmeric, red rice',
+    steps:['Mustard seeds and curry leaves are crackled in coconut oil.','Onion, ginger and green chilli are softened with turmeric.','Coconut milk and kokum are added and simmered.','Prawns are cooked in the sauce for the last few minutes only.'],
+    good:'Prawns are high in protein. Limited to 10 portions a day.',
+    history:'From the Malabar coast of Kerala, where coconut, curry leaves and sour kokum fruit are everyday ingredients in seafood curries.'}),
+  D({id:'d14',date:'2026-09-26',type:'dessert',name:'Gulab Jamun (2 pieces)',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegetarian',allergens:['Milk','Gluten'],price:2.5,max:40,kcal:300,protein:4,colors:['#F2D9B0','#9A4A1E','#E7B64C'],
+    ingredients:'Milk solids (khoya), flour, sugar syrup, cardamom, rose water',
+    steps:['A soft dough of milk solids and a little flour is rolled into balls.','The balls are fried slowly until deep golden.','They are soaked in warm cardamom and rose syrup.'],
+    good:'A small, sweet finish. Best eaten warm.',
+    history:'The name joins the Persian words for rose water (gul-ab) with jamun, a dark Indian fruit of a similar size and colour.'}),
+  D({id:'d18',date:'2026-09-26',type:'dessert',name:'Kheer (Rice Pudding)',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegetarian',allergens:['Milk','Tree nuts'],price:2.5,max:40,kcal:250,protein:7,colors:['#F6EEDB','#EFE2C2','#7BA05B'],
+    ingredients:'Rice, whole milk, sugar, cardamom, pistachio, almonds',
+    steps:['Rice is simmered slowly in whole milk until creamy.','It is sweetened and flavoured with cardamom.','Topped with chopped pistachio and almond and served chilled.'],
+    good:'Gentle and not too sweet.',
+    history:'Rice cooked in milk is one of the oldest Indian desserts, known as payasam in the south and kheer in the north.'}),
+  D({id:'d31',date:'2026-09-26',type:'dessert',exclusive:true,name:'Pistachio Kulfi',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegetarian',allergens:['Milk','Tree nuts'],price:3.5,max:15,kcal:240,protein:6,colors:['#DDE8C4','#B9CF8E','#7BA05B'],
+    ingredients:'Whole milk reduced slowly, sugar, pistachio, cardamom, saffron',
+    steps:['Milk is simmered for hours until reduced by more than half.','Pistachio, cardamom and saffron are stirred in.','Set in moulds and frozen. Delivered in an insulated pack.'],
+    good:'Denser and creamier than ice cream.',
+    history:'Kulfi has been eaten in North India since Mughal times, when it was set in metal cones packed in ice and salt.'}),
+  D({id:'d15',date:'2026-09-26',type:'drink',name:'Mango Lassi',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegetarian',allergens:['Milk'],price:2.8,max:40,kcal:180,protein:6,colors:['#F3C66B','#F7E1A0','#E9A23B'],
+    ingredients:'Yoghurt, Alphonso mango pulp, milk, cardamom',steps:['Yoghurt, mango and milk are blended with a pinch of cardamom and chilled.'],good:'Cooling alongside a spicy main.',history:'Lassi is a yoghurt drink from Punjab. The mango version became a favourite in Indian restaurants abroad.'}),
+  D({id:'d16',date:'2026-09-26',type:'drink',name:'Fresh Orange Juice (330ml)',kitchen:'Bought in',diet:'Vegan',allergens:[],price:2.2,max:60,kcal:150,protein:2,colors:['#F4A93B','#F9D08A','#E9A23B'],
+    ingredients:'Freshly squeezed oranges',steps:['Bought in fresh and kept chilled.'],good:'A source of vitamin C.',history:''}),
+  D({id:'d19',date:'2026-09-26',type:'drink',name:'Sparkling Elderflower (275ml)',kitchen:'Bought in',diet:'Vegan',allergens:[],price:2,max:60,kcal:90,protein:0,colors:['#E8EFD0','#F7F9EE','#9DBB6A'],
+    ingredients:'Sparkling water, elderflower cordial, lemon',steps:['Bought in and kept chilled.'],good:'Light and not too sweet.',history:'Elderflower cordial is a traditional British summer drink.'}),
+  D({id:'d17',date:'2026-09-26',type:'snack',name:'Vegetable Samosas (2)',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegan',allergens:['Gluten'],price:3,max:40,kcal:260,protein:5,colors:['#E0A850','#C98A3E','#5B8C3A'],
+    ingredients:'Pastry, potato, peas, cumin, coriander, green chilli',steps:['Spiced potato and peas are folded into pastry cones.','Fried until crisp and served with tamarind chutney.'],good:'Good for sharing.',history:'Samosas travelled to India with traders from Central Asia around the 13th century.'}),
+
+  // Sunday 27
+  D({id:'d20',date:'2026-09-27',type:'main',name:'Lamb Rogan Josh with Basmati Rice',kitchen:KITCHENS[0],cuisine:'Indian (Kashmir)',allergens:['Milk'],spice:true,extraPrice:8,max:25,kcal:680,protein:36,colors:['#F2ECDD','#8E2A1E','#4F7F34'],
+    ingredients:'Lamb shoulder, yoghurt, Kashmiri chilli, fennel, dried ginger, cardamom, basmati rice',
+    steps:['Lamb is browned with whole spices.','It is cooked slowly with yoghurt, Kashmiri chilli, fennel and dried ginger.','Simmered until tender and the sauce turns deep red.'],
+    good:'Rich in protein. Kashmiri chilli gives colour more than heat.',
+    history:'Rogan josh came to Kashmir with Persian cooking traditions. Its red colour comes from mild Kashmiri chillies.'}),
+  D({id:'d21',date:'2026-09-27',type:'main',name:'Chana Masala with Jeera Rice',kitchen:KITCHENS[0],cuisine:'Indian (Punjab)',diet:'Vegan',allergens:[],spice:true,extraPrice:6.5,max:30,kcal:520,protein:18,colors:['#EEDFB8','#B8702E','#4F8A3A'],
+    ingredients:'Chickpeas, onion, tomato, ginger, green chilli, amchur (dried mango), garam masala, basmati rice, cumin seeds',
+    steps:['Chickpeas are soaked overnight and cooked until soft.','Onion, ginger and tomato are cooked down with spices.','Chickpeas simmer in the masala with a little amchur for sourness.'],
+    good:'Chickpeas are a source of fibre and plant protein. Fully vegan.',
+    history:'An everyday Punjabi dish, often eaten as chole with fried bhature bread.'}),
+  D({id:'d22',date:'2026-09-27',type:'main',name:'Chicken Katsu Curry',kitchen:KITCHENS[2],cuisine:'Japanese',allergens:['Gluten','Eggs','Soya','Celery'],spice:false,extraPrice:8,max:20,kcal:780,protein:38,colors:['#F6F3EA','#A8742C','#D9A441'],
+    ingredients:'Chicken breast, panko breadcrumbs, egg, curry sauce (onion, carrot, apple, curry powder), sticky rice, pickled radish',
+    steps:['Chicken is coated in flour, egg and panko.','Fried until golden and sliced.','Served over rice with a mild, slightly sweet curry sauce.'],
+    good:'Mild and filling. A good choice for anyone who prefers little spice.',
+    history:'Curry arrived in Japan in the late 1800s through the British navy and became one of the country\'s favourite home meals.'}),
+  D({id:'d23',date:'2026-09-27',type:'main',name:'Tofu Massaman Curry',kitchen:KITCHENS[1],cuisine:'Thai',diet:'Vegan',allergens:['Peanuts','Soya'],spice:false,extraPrice:7,max:20,kcal:640,protein:20,colors:['#F5F1E6','#C07A2E','#7A4B2A'],
+    ingredients:'Tofu, potato, coconut milk, massaman paste (cinnamon, cardamom, nutmeg), peanuts, tamarind, jasmine rice',
+    steps:['Massaman paste is fried in coconut cream.','Potato and onion simmer in coconut milk until soft.','Tofu and roasted peanuts are added with tamarind.'],
+    good:'Warming and mild. Contains peanuts.',
+    history:'Massaman curry shows Persian and Muslim influence in old Siam, using spices like cinnamon and cardamom that are rare in other Thai curries.'}),
+  D({id:'d24',date:'2026-09-27',type:'dessert',name:'Gajar Halwa',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegetarian',allergens:['Milk','Tree nuts'],price:2.8,max:30,kcal:280,protein:5,colors:['#F0A35A','#E07B2E','#C9A060'],
+    ingredients:'Carrot, milk, sugar, ghee, cardamom, almonds',steps:['Grated carrot is cooked slowly in milk until thick.','Finished with ghee, cardamom and almonds.'],good:'Served warm.',history:'A winter favourite in North India, made when red Delhi carrots are in season.'}),
+  D({id:'d27',date:'2026-09-27',type:'dessert',name:'Saffron Shrikhand',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegetarian',allergens:['Milk','Tree nuts'],price:2.5,max:30,kcal:230,protein:7,colors:['#F7E3B0','#F1CF7A','#7BA05B'],
+    ingredients:'Strained yoghurt, sugar, saffron, cardamom, pistachio',steps:['Yoghurt is hung overnight to thicken.','Whipped with sugar, saffron and cardamom and chilled.'],good:'Creamy and light.',history:'A dessert from Maharashtra and Gujarat.'}),
+  D({id:'d32',date:'2026-09-27',type:'dessert',exclusive:true,name:'Rasmalai (2 pieces)',kitchen:KITCHENS[0],cuisine:'Indian (Bengal)',diet:'Vegetarian',allergens:['Milk','Tree nuts'],price:3.5,max:15,kcal:260,protein:8,colors:['#F5EBD2','#E9D7A6','#8FB36A'],
+    ingredients:'Fresh cheese (chhena), milk, sugar, saffron, cardamom, pistachio',steps:['Soft cheese discs are cooked in light syrup.','Soaked in sweetened milk with saffron and cardamom.'],good:'Served chilled.',history:'A Bengali sweet, closely related to the rasgulla.'}),
+  D({id:'d25',date:'2026-09-27',type:'drink',name:'Coconut Water (330ml)',kitchen:'Bought in',diet:'Vegan',allergens:[],price:2,max:40,kcal:60,protein:0,colors:['#EDEFE3','#F7F8F1','#8FB36A'],ingredients:'Coconut water',steps:['Bought in and kept chilled.'],good:'Light and naturally low in calories.',history:''}),
+  D({id:'d28',date:'2026-09-27',type:'drink',name:'Sweet Lassi',kitchen:KITCHENS[0],diet:'Vegetarian',allergens:['Milk'],price:2.5,max:40,kcal:170,protein:6,colors:['#F4EEDD','#FBF7EC','#C9A060'],ingredients:'Yoghurt, milk, sugar, cardamom',steps:['Blended and chilled.'],good:'Cooling alongside a spicy main.',history:'Lassi is a yoghurt drink from Punjab.'}),
+  D({id:'d26',date:'2026-09-27',type:'snack',name:'Onion Bhajis (3)',kitchen:KITCHENS[0],cuisine:'Indian',diet:'Vegan',allergens:[],price:3,max:40,kcal:280,protein:6,colors:['#D99A45','#B7772E','#6FA044'],ingredients:'Onion, gram (chickpea) flour, cumin, coriander, green chilli',steps:['Sliced onion is mixed with spiced gram flour batter.','Fried in small clusters until crisp.'],good:'Gluten-free batter.',history:''}),
+];
+
+const members=[
+  {id:'m1',name:'Sophie Grant',phone:'07700 900112',address:'14 Currievale Drive, Currie',postcode:'EH14 5RN',perWeek:5,plan:'5 dinners a week',fee:229,renews:'2026-09-28',status:'Active',allergens:['Peanuts'],emergency:'Mark Grant · 07700 900431',note:''},
+  {id:'m2',name:'Margaret Reid',phone:'0131 496 0204',address:'3 Thomson Crescent, Currie',postcode:'EH14 5HX',perWeek:7,plan:'Every day',fee:299,renews:'2026-10-09',status:'Active',allergens:[],emergency:'Fiona Reid (daughter) · 07700 900877',note:'Knock loudly, hard of hearing. Daughter pays the membership.'},
+  {id:'m3',name:'Aarav Mehta',phone:'07700 900561',address:'Flat 2, 41 Riccarton Mains Road',postcode:'EH14 5NF',perWeek:3,plan:'3 dinners a week',fee:149,renews:'2026-09-27',status:'Trial',allergens:[],emergency:'Rohan Mehta · 07700 900562',note:''},
+  {id:'m4',name:'Ellie Burns',phone:'07700 900390',address:'22 Curriehill Road, Currie',postcode:'EH14 5PT',perWeek:5,plan:'5 dinners a week',fee:229,renews:'2026-10-14',status:'Active',allergens:['Tree nuts'],emergency:'James Burns · 07700 900391',note:''},
+  {id:'m5',name:'Tom Fraser',phone:'07700 900745',address:'9 Lanark Road West, Currie',postcode:'EH14 5ET',perWeek:3,plan:'3 dinners a week',fee:149,renews:'2026-10-02',status:'Active',allergens:['Milk'],emergency:'Anna Fraser · 07700 900746',note:''},
+  {id:'m6',name:'Ruth Paterson',phone:'0131 496 0781',address:'6 Muirwood Road, Currie',postcode:'EH14 5JN',perWeek:7,plan:'Every day',fee:299,renews:'2026-10-05',status:'Active',allergens:['Gluten'],emergency:'David Paterson (son) · 07700 900219',note:'Leave at side door if no answer, then call son.'},
+  {id:'m7',name:'Kiran Das',phone:'07700 900628',address:'17 Scotstoun Park, Currie',postcode:'EH14 5DE',perWeek:5,plan:'5 dinners a week',fee:229,renews:'2026-09-26',status:'Trial',allergens:[],emergency:'Meera Das · 07700 900629',note:''},
+  {id:'m8',name:'Lewis Campbell',phone:'07700 900154',address:'30 Riccarton Avenue, Currie',postcode:'EH14 5PF',perWeek:5,plan:'5 dinners a week',fee:229,renews:'2026-10-11',status:'Active',allergens:['Fish'],emergency:'Claire Campbell · 07700 900155',note:''},
+  {id:'m9',name:'Helen Murray',phone:'0131 496 0355',address:'11 Baberton Mains Drive',postcode:'EH14 3EA',perWeek:7,plan:'Every day',fee:299,renews:'2026-10-18',status:'Active',allergens:[],emergency:'Neil Murray (son) · 07700 900366',note:'Ring doorbell twice.'},
+  {id:'m10',name:'Priya Menon',phone:'07700 900982',address:'5 Juniper Park Road, Juniper Green',postcode:'EH14 5DX',perWeek:5,plan:'5 dinners a week',fee:229,renews:'2026-10-20',status:'Trial',allergens:['Sesame'],emergency:'Arun Menon · 07700 900983',note:''},
+];
+const T=(h,m)=>new Date(2026,8,25,h,m).getTime();
+const orders=[
+  {id:'o1',member:'m1',date:'2026-09-22',main:'d1',dessert:'d1a',drink:'d1b',spice:'Medium',note:'',extras:{},placed:new Date(2026,8,21,18,5).getTime(),status:'Delivered'},
+  {id:'o2',member:'m1',date:'2026-09-23',main:'d2',dessert:null,drink:null,spice:'Mild',note:'',extras:{},placed:new Date(2026,8,22,17,40).getTime(),status:'Delivered'},
+  {id:'o3',member:'m1',date:'2026-09-24',main:'d3',dessert:null,drink:null,spice:'Medium',note:'',extras:{},placed:new Date(2026,8,23,19,12).getTime(),status:'Delivered'},
+  {id:'o10',member:'m2',date:'2026-09-26',main:'d10',dessert:'d18',drink:'d19',spice:'Mild',note:'Soft rice please',extras:{},placed:T(9,14),status:'Received'},
+  {id:'o11',member:'m3',date:'2026-09-26',main:'d10',dessert:'d14',drink:'d15',spice:'Hot',note:'',extras:{d17:1,d10:1},placed:T(12,48),status:'Received'},
+  {id:'o12',member:'m4',date:'2026-09-26',main:'d12',dessert:'d14',drink:'d16',spice:'Medium',note:'',extras:{},placed:T(14,3),status:'Received'},
+  {id:'o13',member:'m5',date:'2026-09-26',main:'d13',dessert:null,drink:'d16',spice:'Medium',note:'',extras:{},placed:T(16,30),status:'Received'},
+  {id:'o14',member:'m6',date:'2026-09-26',main:'d12',dessert:null,drink:'d19',spice:'Mild',note:'',extras:{},placed:T(17,22),status:'Received'},
+  {id:'o15',member:'m7',date:'2026-09-26',main:'d11',dessert:'d14',drink:'d15',spice:'Medium',note:'',extras:{d31:1,d15:1},placed:T(18,51),status:'Received'},
+  {id:'o16',member:'m8',date:'2026-09-26',main:'d30',dessert:'d18',drink:'d15',spice:'Hot',note:'Extra raita if possible',extras:{d30:0},placed:T(19,26),status:'Received'},
+  {id:'o20',member:'m2',date:'2026-09-27',main:'d21',dessert:'d27',drink:'d25',spice:'Mild',note:'',extras:{},placed:T(19,5),status:'Received'},
+  {id:'o21',member:'m6',date:'2026-09-27',main:'d20',dessert:null,drink:'d25',spice:'Medium',note:'',extras:{},placed:T(19,31),status:'Received'},
+];
+// Lewis chose the exclusive prawn curry as a paid upgrade: record it properly.
+orders.find(o=>o.id==='o16').main='d11'; orders.find(o=>o.id==='o16').extras={d30:1};
+
+const emptyForm=()=>({type:'main',kitchen:KITCHENS[0],name:'',cuisine:'',diet:'',story:'',history:'',ingredients:'',steps:'',good:'',kcal:'',protein:'',allergens:[],extraPrice:'7.50',price:'2.50',max:'25',spice:true,exclusive:false,photo:null});
+const S={view:'both',memberTab:'menu',kitchenTab:'live',kDate:null,drafts:{},detail:null,confirmCancel:null,renewOpen:false,delConfirm:null,formErr:'',form:emptyForm(),copyFrom:'',liveSort:'new',me:'m1',members,dishes,orders};
+if(window.innerWidth<1100) S.view='member';
+try{const h=location.hash.replace('#','');if(h==='kitchen'||h==='member')S.view=h;}catch(_){}
+
+const dish=i=>S.dishes.find(d=>d.id===i);
+const member=i=>S.members.find(m=>m.id===i);
+const me=()=>member(S.me);
+const dishesOn=(D,f)=>S.dishes.filter(d=>d.date===D&&(!f||f(d)));
+const ordersOn=D=>S.orders.filter(o=>o.date===D);
+const myOrder=D=>S.orders.find(o=>o.member===S.me&&o.date===D);
+const conflicts=(d,m)=>d?d.allergens.filter(a=>m.allergens.includes(a)):[];
+const priceOf=d=>d.type==='main'&&!d.exclusive?d.extraPrice:d.price;
+const extrasPrice=ex=>Object.entries(ex).reduce((s,[k,q])=>{const d=dish(k);return s+(d?priceOf(d)*q:0);},0);
+const usedOf=dId=>S.orders.reduce((n,o)=>n+(o.main===dId?1:0)+(o.dessert===dId?1:0)+(o.drink===dId?1:0)+(o.extras[dId]||0),0);
+const includedChoices=(D,type)=>dishesOn(D,d=>d.type===type&&!d.exclusive);
+
+/* ---------- Dish illustration (replaced by the kitchen's photo once uploaded) ---------- */
+function rng(seed){let x=7;for(const c of seed)x=(x*31+c.charCodeAt(0))>>>0;return()=>{x=(x*1664525+1013904223)>>>0;return x/4294967296;};}
+const DEF_COL={main:['#EEE3C8','#C0703A','#5B8C3A'],dessert:['#F2D9B0','#B8652A','#E7B64C'],drink:['#F3C66B','#F7E7B8','#7FB069'],snack:['#E0A850','#C98A3E','#5B8C3A']};
+function art(d){
+  if(d.photo) return `<img class="art" src="${d.photo}" alt="Photo of ${esc(d.name)}">`;
+  const [a,b,g]=d.colors||DEF_COL[d.type]; const r=rng(d.id); let s='';
+  const plate=`<ellipse cx="120" cy="80" rx="96" ry="60" fill="#FBFAF7" stroke="#D8D2C6" stroke-width="2"/><ellipse cx="120" cy="80" rx="76" ry="46" fill="none" stroke="#ECE7DD" stroke-width="2"/>`;
+  const dots=(n,cx,cy,rx,ry,col,rmin,rmax)=>{let o='';for(let i=0;i<n;i++){const t=r()*Math.PI*2,k=Math.sqrt(r());o+=`<circle cx="${(cx+Math.cos(t)*rx*k).toFixed(1)}" cy="${(cy+Math.sin(t)*ry*k).toFixed(1)}" r="${(rmin+r()*(rmax-rmin)).toFixed(1)}" fill="${col}"/>`;}return o;};
+  if(d.type==='drink'){
+    s=`<ellipse cx="120" cy="132" rx="46" ry="8" fill="rgba(0,0,0,.08)"/><path d="M92 30 L148 30 L140 128 L100 128 Z" fill="${a}" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="3"/><path d="M95 42 L145 42 L144 52 L96 52 Z" fill="${b}" opacity=".7"/><line x1="132" y1="12" x2="122" y2="96" stroke="${g}" stroke-width="6" stroke-linecap="round"/><path d="M104 60 L108 118" stroke="#FFFFFF" stroke-opacity=".45" stroke-width="5" stroke-linecap="round"/>`;
+  } else if(d.type==='dessert'){
+    s=plate+`<ellipse cx="120" cy="82" rx="54" ry="32" fill="${a}"/>`+(d.id.charCodeAt(d.id.length-1)%2?`<circle cx="104" cy="78" r="17" fill="${b}"/><circle cx="136" cy="84" r="17" fill="${b}"/><circle cx="99" cy="72" r="5" fill="#FFFFFF" opacity=".35"/><circle cx="131" cy="78" r="5" fill="#FFFFFF" opacity=".35"/>`:`<ellipse cx="120" cy="80" rx="42" ry="22" fill="${b}"/>`)+dots(10,120,80,40,20,g,2,3.5);
+  } else if(d.type==='snack'){
+    s=plate+[[88,86,0],[120,70,1],[150,90,2]].map(([x,y,i])=>`<polygon points="${x-22},${y+16} ${x},${y-22} ${x+22},${y+16}" fill="${a}" stroke="${b}" stroke-width="3" stroke-linejoin="round" transform="rotate(${(r()*30-15).toFixed(0)} ${x} ${y})"/>`).join('')+dots(6,120,112,40,6,g,2.5,4);
+  } else {
+    s=plate+`<ellipse cx="92" cy="78" rx="44" ry="30" fill="${a}"/>`+dots(26,92,78,40,26,'rgba(255,255,255,.55)',1.2,2)
+      +`<path d="M116 72 C120 48 172 46 180 66 C188 88 168 106 146 104 C124 102 112 92 116 72Z" fill="${b}"/>`
+      +dots(5,148,78,24,16,'rgba(255,255,255,.28)',3,6)+dots(9,128,78,56,26,g,2.5,4.5);
+  }
+  return `<svg class="art" viewBox="0 0 240 150" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustration of ${esc(d.name)}"><rect width="240" height="150" fill="var(--art-bg)"/>${s}</svg>`;
+}
+
+/* ---------- Member app ---------- */
+function draftFor(D){
+  if(!S.drafts[D]){const o=myOrder(D);
+    S.drafts[D]=o?{main:o.main,dessert:o.dessert,drink:o.drink,spice:o.spice,note:o.note,extras:{...o.extras}}:{main:null,dessert:null,drink:null,spice:'Medium',note:'',extras:{}};}
+  return S.drafts[D];
+}
+function renderMember(){
+  const m=me(),t=now(),Dd=orderDate(t),o=myOrder(Dd),renewIn=daysBetween(ymd(t),m.renews);
+  let banners='';
+  if(renewIn<0) banners+=`<div class="banner bad"><span class="t"><b>Your membership ended on ${fmtDay(m.renews)}.</b> Renew to order again.</span><button class="act" data-act="renew-open">Renew</button></div>`;
+  else if(!o) banners+=`<div class="banner warm" role="status"><span class="t">Order ${relDay(Dd)==='tomorrow'?"tomorrow's":fmtDay(Dd)} dinner by 8pm<br><span class="cd" data-countdown="${closesAt(Dd).getTime()}">${countdown(closesAt(Dd))}</span> left</span><button class="act" data-act="mtab" data-t="menu">Choose now</button></div>`;
+  else banners+=`<div class="banner good"><span class="t"><b>${fmtDay(Dd)} dinner booked.</b> You can change it for <span class="mono" data-countdown="${closesAt(Dd).getTime()}">${countdown(closesAt(Dd))}</span></span></div>`;
+  if(S.renewOpen) banners+=`<div class="banner calm"><span class="t"><b>Renew ${esc(m.plan)} for ${money(m.fee)}?</b><br>28 days, charged to card ending 4242.</span><span style="display:flex;gap:6px"><button class="act" data-act="renew">Renew</button><button class="act ghost" data-act="renew-close">Not now</button></span></div>`;
+  else if(renewIn>=0&&renewIn<=3) banners+=`<div class="banner calm"><span class="t">Membership renews in <b>${renewIn===0?'less than a day':renewIn+(renewIn===1?' day':' days')}</b> (${fmtDay(m.renews)})</span><button class="act" data-act="renew-open">Renew</button></div>`;
+  const tabs=[['menu','Menu'],['orders','My dinners'],['account','Account']].map(([k,l])=>`<button data-act="mtab" data-t="${k}" aria-pressed="${S.memberTab===k}">${l}</button>`).join('');
+  let body;
+  if(S.memberTab==='menu') body=S.detail&&dish(S.detail)?dishDetail(dish(S.detail),Dd):memberMenu(Dd,renewIn<0);
+  else if(S.memberTab==='orders') body=memberOrders(); else body=memberAccount();
+  document.getElementById('member').innerHTML=`<div class="ph-head"><div class="logo">The Dinner <span>Project</span></div><div class="hi">Hi ${esc(m.name.split(' ')[0])}</div></div>
+    <div class="ph-sticky">${banners}<div class="ph-tabs" role="group" aria-label="Sections">${tabs}</div></div><div class="ph-body">${body}</div>`;
+}
+function choiceCard(Dd,d,group,dr,m,disabled){
+  const c=conflicts(d,m),blocked=c.length>0,checked=dr[group]===d.id;
+  return `<div class="dish${blocked?' blocked':''}"><div class="thumb">${art(d)}</div><div class="info">
+    <label for="${group}-${d.id}"><input type="radio" name="${group}-${Dd}" id="${group}-${d.id}" value="${d.id}" data-act="pick" data-g="${group}" data-d="${Dd}" ${checked?'checked':''} ${blocked||disabled?'disabled':''}><span class="nm">${esc(d.name)}</span></label>
+    <span class="meta">${d.kcal?d.kcal+' kcal · ':''}${esc(d.cuisine||d.kitchen)}</span>
+    <span class="pills">${blocked?`<span class="pill bad">Contains ${c.join(', ').toLowerCase()} (your allergy)</span>`:''}${d.diet?`<span class="pill good">${d.diet}</span>`:''}${d.allergens.filter(a=>!c.includes(a)).map(a=>`<span class="pill">${a}</span>`).join('')}</span>
+    <button class="linkish" data-act="detail" data-id="${d.id}">See the dish</button></div></div>`;
+}
+function extraRow(Dd,d,dr,m){
+  const q=dr.extras[d.id]||0,c=conflicts(d,m);
+  return `<div class="extra${d.exclusive?' excl':''}"><div class="thumb">${art(d)}</div><div><div class="nm">${esc(d.name)}</div><div class="sub">${money(priceOf(d))}${d.kcal?' · '+d.kcal+' kcal':''}</div>${c.length?`<span class="pill bad">Contains ${c.join(', ').toLowerCase()}</span>`:`<button class="linkish" data-act="detail" data-id="${d.id}">See the dish</button>`}</div>
+    <div class="step"><button aria-label="Remove one ${esc(d.name)}" data-act="ex" data-d="${Dd}" data-id="${d.id}" data-n="-1" ${q?'':'disabled'}>−</button><span>${q}</span><button aria-label="Add one ${esc(d.name)}" data-act="ex" data-d="${Dd}" data-id="${d.id}" data-n="1" ${c.length?'disabled':''}>+</button></div></div>`;
+}
+function memberMenu(Dd,expired){
+  const m=me();
+  const head=`<div class="day-h"><div class="label">Dinner delivered 7–8pm</div><h2>${fmtDayLong(Dd)}</h2><p>Order by 8:00pm ${relDay(addDays(Dd,-1))}${relDay(addDays(Dd,-1))!=='today'&&relDay(addDays(Dd,-1))!=='tomorrow'?'':' ('+fmtDay(addDays(Dd,-1))+')'}</p></div>`;
+  if(expired) return head+`<div class="empty">Your membership has ended. Renew to see and order this menu.</div>`;
+  const mains=includedChoices(Dd,'main');
+  if(!mains.length) return head+`<div class="empty">The kitchen is still finalising this menu. Check back soon.</div>`;
+  const o=myOrder(Dd),dr=draftFor(Dd);
+  const used=S.orders.filter(x=>x.member===m.id&&weekStart(x.date)===weekStart(Dd)&&x.date!==Dd).length;
+  const full=!o&&used>=m.perWeek;
+  const desserts=includedChoices(Dd,'dessert'),drinks=includedChoices(Dd,'drink');
+  const excl=dishesOn(Dd,d=>d.exclusive);
+  const chosen=dr.main&&dish(dr.main);
+  const exTotal=extrasPrice(dr.extras);
+  const changed=o&&(o.main!==dr.main||o.dessert!==dr.dessert||o.drink!==dr.drink||o.spice!==dr.spice||o.note!==dr.note||JSON.stringify(o.extras)!==JSON.stringify(dr.extras));
+  const action=o&&!changed?`<button class="btn sec" disabled>Booked ✓</button>`:`<button class="btn" data-act="confirm" data-d="${Dd}" ${!dr.main?'disabled':''}>${o?'Save changes':'Confirm dinner'}${exTotal?` · pay ${money(exTotal)}`:''}</button>`;
+  const cancel=o?(S.confirmCancel===Dd?`<div class="inline-confirm">Cancel your ${fmtDay(Dd)} dinner?${extrasPrice(o.extras)?' Paid extras will be refunded.':''} <button class="btn small danger" data-act="cancel" data-d="${Dd}">Yes, cancel</button><button class="btn small sec" data-act="cancel-no">Keep it</button></div>`:`<button class="linkbtn" data-act="cancel-ask" data-d="${Dd}">Cancel this dinner</button>`):'';
+  const noneOpt=(g,label)=>`<label class="none-opt"><input type="radio" name="${g}-${Dd}" value="" data-act="pick" data-g="${g}" data-d="${Dd}" ${dr[g]?'':'checked'} ${full?'disabled':''}>${label}</label>`;
+  const paidGroups=[['Extra main (for someone else)',mains],['Extra desserts',desserts],['Extra drinks',drinks],['Snacks',dishesOn(Dd,d=>d.type==='snack'&&!d.exclusive)]]
+    .filter(([,l])=>l.length).map(([h,l])=>`<div class="group"><div class="label">${h}</div>${l.map(d=>extraRow(Dd,d,dr,m)).join('')}</div>`).join('');
+  return `${head}
+    <div class="incl"><span><b>Included in your plan:</b> 1 main, 1 dessert and 1 drink, with water and a refresher towel.</span><span class="muted">This week: ${used+(o?1:0)} of ${m.perWeek} dinners used</span></div>
+    ${full?`<div class="banner warm"><span class="t">You've used all ${m.perWeek} dinners in your plan this week. Your next dinners open on Monday.</span></div>`:''}
+    <div class="group"><div class="group-h"><span class="label">1 · Choose your main</span><span class="pill good">Included</span></div>${mains.map(d=>choiceCard(Dd,d,'main',dr,m,full)).join('')}</div>
+    ${chosen&&chosen.spice?`<div class="field"><label for="spice-${Dd}">Spice level</label><select id="spice-${Dd}" data-act="spice" data-d="${Dd}">${['Mild','Medium','Hot'].map(s=>`<option ${dr.spice===s?'selected':''}>${s}</option>`).join('')}</select></div>`:''}
+    ${desserts.length?`<div class="group"><div class="group-h"><span class="label">2 · Choose your dessert</span><span class="pill good">Included</span></div>${desserts.map(d=>choiceCard(Dd,d,'dessert',dr,m,full)).join('')}${noneOpt('dessert','No dessert, thanks')}</div>`:''}
+    ${drinks.length?`<div class="group"><div class="group-h"><span class="label">3 · Choose your drink</span><span class="pill good">Included</span></div>${drinks.map(d=>choiceCard(Dd,d,'drink',dr,m,full)).join('')}${noneOpt('drink','Just water, thanks')}</div>`:''}
+    <div class="field"><label for="note-${Dd}">Note for the kitchen</label><textarea id="note-${Dd}" data-act="note" data-d="${Dd}" placeholder="For example: less oil, extra raita">${esc(dr.note)}</textarea></div>
+    ${excl.length?`<div class="group"><div class="group-h"><span class="label">Members' exclusives</span><span class="pill gold">Paid · limited</span></div>${excl.map(d=>extraRow(Dd,d,dr,m)).join('')}</div>`:''}
+    <div class="group-h" style="margin-bottom:-8px"><span class="label">Add more (paid)</span></div>
+    ${paidGroups}
+    <div class="summary">
+      <div class="line"><span>${chosen?esc(chosen.name):'Choose a main to continue'}</span><span class="muted">Included</span></div>
+      <div class="line"><span>${dr.dessert?esc(dish(dr.dessert).name):'No dessert'}</span><span class="muted">Included</span></div>
+      <div class="line"><span>${dr.drink?esc(dish(dr.drink).name):'Water only'}</span><span class="muted">Included</span></div>
+      ${Object.entries(dr.extras).map(([k,q])=>`<div class="line"><span>${q} × ${esc(dish(k).name)}</span><span class="mono">${money(priceOf(dish(k))*q)}</span></div>`).join('')}
+      <div class="line"><b>To pay today</b><b class="mono">${money(exTotal)}</b></div>
+      ${action}${cancel}
+      <p class="skip"><b>Eating out ${relDay(Dd)==='tomorrow'?'tomorrow':'that day'}?</b> Just don't place an order. We won't deliver, and the dinner stays in your plan for another day this week.</p>
+    </div>`;
+}
+function dishDetail(d,Dd){
+  const m=me(),c=conflicts(d,m),open=d.date===Dd&&phase(Dd)==='open';
+  const included=!d.exclusive&&d.type!=='snack';
+  let act='';
+  if(open&&!c.length){
+    const dr=draftFor(Dd);
+    if(included) act=dr[d.type]===d.id?`<button class="btn sec" disabled>This is your ${TYPES[d.type].toLowerCase()} ✓</button>`:`<button class="btn" data-act="choose" data-id="${d.id}" data-d="${Dd}">Choose as your ${TYPES[d.type].toLowerCase()} (included)</button>`;
+    else act=`<button class="btn" data-act="ex" data-d="${Dd}" data-id="${d.id}" data-n="1" data-back="1">Add one · ${money(priceOf(d))}</button>`;
+  }
+  return `<div class="detail">
+    <button class="back" data-act="detail-close">← Back to menu</button>
+    <div class="hero">${art(d)}${d.photo?'':'<span class="cap">Illustration · kitchen photo coming soon</span>'}</div>
+    <div><div class="label">${esc(d.cuisine||TYPES[d.type])}${d.exclusive?' · Members\' exclusive':''}</div><h2 style="font-size:22px;margin-top:2px">${esc(d.name)}</h2><p class="muted small" style="margin:4px 0 0">Made by ${esc(d.kitchen)}</p></div>
+    <div class="nutri"><div><div class="label">Energy</div><div class="v">${d.kcal??'–'}</div><span class="small muted">kcal</span></div><div><div class="label">Protein</div><div class="v">${d.protein??'–'}</div><span class="small muted">grams</span></div><div><div class="label">Spice</div><div class="v" style="font-size:16px;padding-top:4px">${d.spice?'You choose':'Mild'}</div></div></div>
+    <p class="small muted" style="margin-top:-6px">Approximate figures per portion.</p>
+    <div class="pills">${c.length?`<span class="pill bad">Contains ${c.join(', ').toLowerCase()} (your allergy)</span>`:''}${d.diet?`<span class="pill good">${d.diet}</span>`:''}${d.allergens.length?d.allergens.map(a=>`<span class="pill">${a}</span>`).join(''):'<span class="pill">None of the 14 main allergens</span>'}</div>
+    ${d.ingredients?`<div><h3>What's in it</h3><p>${esc(d.ingredients)}</p></div>`:''}
+    ${d.steps.length?`<div><h3>How we make it</h3><ol>${d.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div>`:''}
+    ${d.good?`<div><h3>Good to know</h3><p>${esc(d.good)}</p></div>`:''}
+    ${d.history?`<div><h3>The story behind it</h3><p>${esc(d.history)}</p></div>`:''}
+    ${act}</div>`;
+}
+function itemsLine(o){
+  const parts=[`${esc(dish(o.main)?.name)}${dish(o.main)?.spice?` <span class="muted">(${o.spice})</span>`:''}`];
+  if(o.dessert) parts.push(esc(dish(o.dessert)?.name)); if(o.drink) parts.push(esc(dish(o.drink)?.name));
+  return parts.join(' · ');
+}
+function memberOrders(){
+  const list=S.orders.filter(o=>o.member===S.me).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!list.length) return `<div class="empty">No dinners yet.</div>`;
+  return `<div class="olist">${list.map(o=>{
+    const p=phase(o.date);let l,c;
+    if(p==='open'){l='Booked · you can still change it';c='warm';}
+    else if(p==='delivered'||o.status==='Delivered'){l='Delivered';c='good';}
+    else if(o.status==='Out for delivery'){l='On its way · 7–8pm';c='warm';}
+    else {l=o.status==='Received'?'Order received':o.status;c='acc';}
+    const ex=Object.entries(o.extras).filter(([,q])=>q).map(([k,q])=>`${q} × ${esc(dish(k)?.name)}`).join(', ');
+    return `<div class="ocard"><div class="top"><span class="dt">${fmtDay(o.date)}</span><span class="pill ${c}">${l}</span></div><div class="small">${itemsLine(o)}</div>${ex?`<div class="muted small">Paid extras: ${ex} · ${money(extrasPrice(o.extras))}</div>`:''}</div>`;}).join('')}</div>`;
+}
+function memberAccount(){
+  const m=me();
+  return `<div class="day-h"><h2>${esc(m.name)}</h2><p>${m.status} member</p></div>
+  <dl class="kv"><dt>Plan</dt><dd>${esc(m.plan)} · ${money(m.fee)} per 28 days</dd><dt>Renews</dt><dd>${fmtDayLong(m.renews)}</dd><dt>Address</dt><dd>${esc(m.address)}<br>${esc(m.postcode)}</dd><dt>Phone</dt><dd>${esc(m.phone)}</dd>
+  <dt>Allergies</dt><dd>${m.allergens.length?m.allergens.map(a=>`<span class="pill bad">${a}</span>`).join(' '):'None recorded'}</dd><dt>Emergency contact</dt><dd>${esc(m.emergency)}</dd><dt>Payment</dt><dd>Card ending 4242</dd></dl>
+  <p class="muted small" style="margin:0">Dishes with your allergens can't be selected. Tell us straight away if your allergies change.</p>`;
+}
+
+/* ---------- Kitchen portal ---------- */
+function renderKitchen(){
+  const t=now(); if(!S.kDate) S.kDate=orderDate(t);
+  const newCount=ordersOn(orderDate(t)).filter(o=>now()-o.placed<3600000&&o.placed<=+now()).length;
+  const tabs=[['live','Live orders',newCount],['counts','Cooking counts'],['menu','Menu planner'],['members','Members']].map(([k,l,n])=>`<button data-act="ktab" data-t="${k}" aria-pressed="${S.kitchenTab===k}">${l}${n?`<span class="count" title="Orders in the last hour">${n}</span>`:''}</button>`).join('');
+  let body;
+  if(S.kitchenTab==='members') body=kMembers();
+  else{
+    const back=S.kitchenTab==='menu'?0:1, len=S.kitchenTab==='menu'?14:7;
+    const start=addDays(ymd(t),-back);
+    const list=Array.from({length:len},(_,i)=>addDays(start,i)); if(!list.includes(S.kDate)) list.push(S.kDate);
+    const chips=list.map(Dd=>{const p=phase(Dd,t),n=S.kitchenTab==='menu'?dishesOn(Dd).length+' dishes':ordersOn(Dd).length+' orders';
+      return `<button class="dchip" data-act="kdate" data-d="${Dd}" aria-pressed="${S.kDate===Dd}"><span class="d">${fmtDay(Dd)}</span><span class="s">${n}</span><span class="phase ${p}">${PHASE_LABEL[p]}</span></button>`;}).join('');
+    const jump=S.kitchenTab==='menu'?`<div class="field" style="max-width:220px"><label for="k-jump">Plan further ahead</label><input type="date" id="k-jump" data-act="kjump" min="${ymd(t)}" value="${S.kDate}"></div>`:'';
+    body=`<div class="dates" role="group" aria-label="Delivery date">${chips}</div>${jump}`+(S.kitchenTab==='live'?kLive(S.kDate):S.kitchenTab==='counts'?kCounts(S.kDate):kPlanner(S.kDate));
+  }
+  document.getElementById('kitchen').innerHTML=`<div class="p-head"><h2>Kitchen portal</h2><div class="p-tabs" role="group" aria-label="Portal sections">${tabs}</div></div><div class="p-body">${body}</div>`;
+}
+function phaseLine(Dd){
+  const p=phase(Dd);
+  const txt={hidden:`Members can't see this menu until ${fmtTime(opensAt(Dd))} ${fmtDay(addDays(Dd,-2))}.`,
+    open:`Members are ordering now. Orders close ${fmtTime(closesAt(Dd))} ${fmtDay(addDays(Dd,-1))} · <span class="mono" data-countdown="${closesAt(Dd).getTime()}">${countdown(closesAt(Dd))}</span> left`,
+    cooking:`Orders are final. Deliver 7–8pm ${fmtDay(Dd)}.`,delivered:`Delivered ${fmtDay(Dd)}.`}[p];
+  return `<div style="display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center"><span class="phase ${p}">${PHASE_LABEL[p]}</span><span class="muted" style="font-size:13.5px">${txt}</span></div>`;
+}
+function allergyCell(o,m){
+  const ids=[o.main,o.dessert,o.drink,...Object.keys(o.extras).filter(k=>o.extras[k])].filter(Boolean);
+  const bad=[...new Set(ids.flatMap(k=>conflicts(dish(k),m)))];
+  return (m.allergens.length?m.allergens.map(a=>`<span class="pill ${bad.includes(a)?'bad':'warm'}">${a}</span>`).join(' '):'<span class="muted">None</span>')+(bad.length?`<div class="flag small">Check: order contains ${bad.join(', ').toLowerCase()}</div>`:'');
+}
+function kLive(Dd){
+  const p=phase(Dd); let os=ordersOn(Dd);
+  if(!os.length) return phaseLine(Dd)+`<div class="empty">No orders for ${fmtDayLong(Dd)} yet.${p==='hidden'?` Members can start ordering at ${fmtTime(opensAt(Dd))} ${fmtDay(addDays(Dd,-2))}.`:''}</div>`+(p==='open'?`<div><button class="btn small sec" data-act="simulate" data-d="${Dd}">Simulate a member ordering</button></div>`:'');
+  os=[...os].sort(S.liveSort==='route'?(a,b)=>(member(a.member).postcode+member(a.member).address).localeCompare(member(b.member).postcode+member(b.member).address):(a,b)=>b.placed-a.placed);
+  const lastHour=os.filter(o=>now()-o.placed<3600000&&o.placed<=+now()).length;
+  const rows=os.map((o,i)=>{const m=member(o.member),isNew=now()-o.placed<900000&&o.placed<=+now();
+    const ex=Object.entries(o.extras).filter(([,q])=>q).map(([k,q])=>`${q} × ${esc(dish(k).name)}`).join(', ');
+    return `<tr class="${isNew?'is-new':''}"><td class="num">${S.liveSort==='route'?i+1:fmtTime(new Date(o.placed))}<div class="muted small">${S.liveSort==='route'?'':ago(o.placed)}</div>${isNew?'<span class="pill warm">New</span>':''}${o.updated?'<div class="muted small">Changed</div>':''}</td>
+      <td><b>${esc(m.name)}</b><div class="small">${esc(m.address)}, ${esc(m.postcode)}</div><div class="muted small mono">${esc(m.phone)}</div>${m.note?`<div class="small" style="margin-top:2px">${esc(m.note)}</div>`:''}</td>
+      <td class="dishcell small">${itemsLine(o)}${ex?`<div class="muted">+ ${ex} (${money(extrasPrice(o.extras))} paid)</div>`:''}${o.note?`<div>“${esc(o.note)}”</div>`:''}</td>
+      <td>${allergyCell(o,m)}</td>
+      <td><select class="status" id="st-${o.id}" data-act="ostatus" data-id="${o.id}" aria-label="Status for ${esc(m.name)}">${STATUSES.map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select></td></tr>`;}).join('');
+  return `${phaseLine(Dd)}
+  <div class="stat-row"><div class="stat"><div class="label">Orders</div><div class="v">${os.length}</div></div><div class="stat"><div class="label">In the last hour</div><div class="v">${lastHour}</div></div><div class="stat"><div class="label">Packed</div><div class="v">${os.filter(o=>['Packed','Out for delivery','Delivered'].includes(o.status)).length}</div></div><div class="stat"><div class="label">Delivered</div><div class="v">${os.filter(o=>o.status==='Delivered').length}</div></div></div>
+  <div><div class="sec-h"><h3>Orders for ${fmtDayLong(Dd)}</h3><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <div class="seg" role="group" aria-label="Sort"><button data-act="lsort" data-s="new" aria-pressed="${S.liveSort==='new'}">Newest first</button><button data-act="lsort" data-s="route" aria-pressed="${S.liveSort==='route'}">Delivery route</button></div>
+    ${p==='open'?`<button class="btn small sec" data-act="simulate" data-d="${Dd}">Simulate a member ordering</button>`:''}</div></div>
+  <div class="tbl-wrap"><table><thead><tr><th class="num">${S.liveSort==='route'?'Stop':'Placed'}</th><th>Member and address</th><th>Dinner</th><th>Allergies</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+function kCounts(Dd){
+  const os=ordersOn(Dd),p=phase(Dd);
+  const head=phaseLine(Dd)+(p==='open'?`<p class="muted small" style="margin:-10px 0 0">Counts update as members order. They become final at 8pm.</p>`:'');
+  if(!os.length) return head+`<div class="empty">No orders for ${fmtDayLong(Dd)} yet.</div>`;
+  const inc=(d,f)=>os.filter(o=>o[f]===d.id).length, paid=d=>os.reduce((n,o)=>n+(o.extras[d.id]||0),0);
+  const row=(d,f)=>{const a=f?inc(d,f):0,b=paid(d);if(!a&&!b)return'';return `<tr><td class="dishcell"><b>${esc(d.name)}</b>${d.exclusive?' <span class="pill gold">Exclusive</span>':''}<div class="muted small">${esc(d.kitchen)}</div></td><td class="num">${f?a:'–'}</td><td class="num">${b||'–'}</td><td class="num"><span class="big">${a+b}</span></td><td class="num">${d.max}</td></tr>`;};
+  const mainsRows=dishesOn(Dd,d=>d.type==='main').map(d=>{const r=row(d,d.exclusive?null:'main');if(!r||!d.spice)return r;const sp=['Mild','Medium','Hot'].map(s=>os.filter(o=>o.main===d.id&&o.spice===s).length);return r.replace('</td><td class="num">',`<div class="small">Spice: ${sp[0]} mild · ${sp[1]} medium · ${sp[2]} hot</div></td><td class="num">`);}).join('');
+  const sideRows=['dessert','drink'].map(tp=>dishesOn(Dd,d=>d.type===tp).map(d=>row(d,d.exclusive?null:tp)).join('')).join('')+dishesOn(Dd,d=>d.type==='snack').map(d=>row(d,null)).join('');
+  const tbl=(r)=>`<div class="tbl-wrap"><table><thead><tr><th>Item</th><th class="num">Included</th><th class="num">Paid</th><th class="num">Total</th><th class="num">Limit</th></tr></thead><tbody>${r}</tbody></table></div>`;
+  const byK={};os.forEach(o=>{const add=(k,q)=>{const d=dish(k);if(!d||!q)return;(byK[d.kitchen]=byK[d.kitchen]||{})[d.name]=(byK[d.kitchen][d.name]||0)+q;};add(o.main,1);add(o.dessert,1);add(o.drink,1);Object.entries(o.extras).forEach(([k,q])=>add(k,q));});
+  const revenue=os.reduce((s,o)=>s+extrasPrice(o.extras),0);
+  const mainsTotal=os.length+os.reduce((n,o)=>n+dishesOn(Dd,d=>d.type==='main').reduce((x,d)=>x+(o.extras[d.id]||0),0),0);
+  return `${head}
+  <div class="stat-row"><div class="stat"><div class="label">Dinners</div><div class="v">${os.length}</div></div><div class="stat"><div class="label">Mains to cook</div><div class="v">${mainsTotal}</div></div><div class="stat"><div class="label">Paid extras</div><div class="v">${money(revenue)}</div></div><div class="stat"><div class="label">Members with allergies</div><div class="v">${os.filter(o=>member(o.member).allergens.length).length}</div></div></div>
+  <div class="grid2"><div><div class="sec-h"><h3>Mains</h3></div>${tbl(mainsRows)}</div><div><div class="sec-h"><h3>Desserts, drinks and snacks</h3></div>${tbl(sideRows)}</div></div>
+  <div><div class="sec-h"><h3>Send to each kitchen</h3><button class="btn small sec" data-act="copy" data-d="${Dd}">Copy prep sheet</button></div>
+  <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${Object.entries(byK).map(([k,items])=>`<div class="ocard"><b>${esc(k)}</b><span class="muted small">${Object.entries(items).map(([n,q])=>`${q} × ${esc(n)}`).join('<br>')}</span></div>`).join('')}</div></div>`;
+}
+function kPlanner(Dd){
+  const p=phase(Dd),list=dishesOn(Dd),locked=p==='cooking'||p==='delivered',f=S.form;
+  const rows=list.length?['main','dessert','drink','snack'].map(tp=>list.filter(d=>d.type===tp).map(d=>{
+    const sold=usedOf(d.id);
+    const del=S.delConfirm===d.id?`<span class="inline-confirm" style="padding:4px 8px">Remove? <button class="btn small danger" data-act="del" data-id="${d.id}">Remove</button><button class="btn small sec" data-act="del-no">Keep</button></span>`:(!locked&&!sold?`<button class="linkbtn" data-act="del-ask" data-id="${d.id}">Remove</button>`:'');
+    return `<div class="mdish"><div class="thumb">${art(d)}</div><div style="display:grid;gap:4px;min-width:0"><div class="top"><div><b>${esc(d.name)}</b><div class="muted small">${TYPES[d.type]}${d.exclusive?' · exclusive':(d.type==='snack'?' · paid':' · included')} · ${esc(d.kitchen)} · ${money(priceOf(d))}${d.type==='main'&&!d.exclusive?' as extra':''}</div></div></div>
+      <div class="pills">${d.exclusive?'<span class="pill gold">Exclusive</span>':''}${d.kcal?`<span class="pill">${d.kcal} kcal</span>`:''}${d.diet?`<span class="pill good">${d.diet}</span>`:''}${d.allergens.map(a=>`<span class="pill">${a}</span>`).join('')}<span class="pill acc">${sold} of ${d.max} ordered</span></div>
+      <div class="acts"><label class="upl">${d.photo?'Change photo':'Add photo'}<input type="file" accept="image/*" hidden data-act="dphoto" data-id="${d.id}"></label>${d.steps.length&&d.history?'':'<span class="pill warm">Add recipe or story</span>'}${del}</div></div></div>`;}).join('')).join('')
+    :`<div class="empty">No dishes for ${fmtDayLong(Dd)} yet.</div>`;
+  const others=[...new Set(S.dishes.map(d=>d.date))].filter(x=>x!==Dd).sort().reverse();
+  const copy=locked?'':`<div class="copybar"><div class="field"><label for="k-copy">Copy dishes from another day</label><select id="k-copy" data-act="copyfrom"><option value="">Choose a day</option>${others.map(x=>`<option value="${x}" ${S.copyFrom===x?'selected':''}>${fmtDay(x)} (${dishesOn(x).length} dishes)</option>`).join('')}</select></div><button class="btn small sec" data-act="copymenu" ${S.copyFrom?'':'disabled'}>Copy to ${fmtDay(Dd)}</button></div>`;
+  const form=locked?`<div class="empty">Orders for this day have closed, so the menu is locked.</div>`:`
+    <form class="form" id="dish-form" novalidate>
+      <h3 style="font-size:16px">Add a dish for ${fmtDay(Dd)}</h3>
+      <p class="muted small" style="margin:0">${p==='open'?'Members can already see this menu, so new dishes appear for them straight away.':`Hidden from members until ${fmtTime(opensAt(Dd))} ${fmtDay(addDays(Dd,-2))}.`}</p>
+      <fieldset><legend>The basics</legend>
+        <div class="two"><div class="field"><label for="f-type">Type</label><select id="f-type" data-f="type">${Object.entries(TYPES).map(([k,l])=>`<option value="${k}" ${f.type===k?'selected':''}>${l}</option>`).join('')}</select></div>
+        <div class="field"><label for="f-kitchen">Made by</label><select id="f-kitchen" data-f="kitchen">${KITCHENS.map(k=>`<option ${f.kitchen===k?'selected':''}>${esc(k)}</option>`).join('')}</select></div></div>
+        <div class="field"><label for="f-name">Dish name</label><input type="text" id="f-name" data-f="name" value="${esc(f.name)}" placeholder="e.g. Chicken Tikka Masala with Pilau Rice"></div>
+        <div class="two"><div class="field"><label for="f-cuisine">Cuisine</label><input type="text" id="f-cuisine" data-f="cuisine" value="${esc(f.cuisine)}" placeholder="Indian"></div>
+        <div class="field"><label for="f-diet">Diet</label><select id="f-diet" data-f="diet"><option value="" ${!f.diet?'selected':''}>Contains meat or fish</option><option ${f.diet==='Vegetarian'?'selected':''}>Vegetarian</option><option ${f.diet==='Vegan'?'selected':''}>Vegan</option></select></div></div>
+        <div class="photo-prev">${f.photo?`<div class="thumb"><img class="art" src="${f.photo}" alt="New dish photo"></div><span>Photo ready</span><button type="button" class="linkbtn" data-act="fphoto-clear">Remove</button>`:`<label class="upl">Add a photo<input type="file" accept="image/*" hidden id="f-photo" data-act="fphoto"></label><span class="muted">Optional. You can add it later.</span>`}</div>
+      </fieldset>
+      <fieldset><legend>Price and portions</legend>
+        ${f.type!=='snack'?`<label class="checkline"><input type="checkbox" id="f-excl" data-f="exclusive" ${f.exclusive?'checked':''}> Members' exclusive (always paid)</label>`:''}
+        <div class="two">${f.type==='main'&&!f.exclusive?`<div class="field"><label for="f-extra">Price as an extra main (£)</label><input type="number" id="f-extra" data-f="extraPrice" min="0" step="0.1" value="${esc(f.extraPrice)}"></div>`:`<div class="field"><label for="f-price">${f.exclusive||f.type==='snack'?'Price (£)':'Price as an extra (£)'}</label><input type="number" id="f-price" data-f="price" min="0" step="0.1" value="${esc(f.price)}"></div>`}
+        <div class="field"><label for="f-max">Most we can make</label><input type="number" id="f-max" data-f="max" min="1" step="1" value="${esc(f.max)}"></div></div>
+        ${f.type==='main'?`<label class="checkline"><input type="checkbox" id="f-spice" data-f="spice" ${f.spice?'checked':''}> Members can choose mild, medium or hot</label>`:''}
+      </fieldset>
+      <fieldset><legend>Allergens (UK 14)</legend><div class="allergen-grid">${ALLERGENS.map((a,i)=>`<label><input type="checkbox" id="f-al-${i}" data-al="${a}" ${f.allergens.includes(a)?'checked':''}>${a}</label>`).join('')}</div></fieldset>
+      <fieldset><legend>What members read</legend>
+        <div class="two"><div class="field"><label for="f-kcal">Calories per portion</label><input type="number" id="f-kcal" data-f="kcal" min="0" value="${esc(f.kcal)}" placeholder="650"></div><div class="field"><label for="f-prot">Protein (g)</label><input type="number" id="f-prot" data-f="protein" min="0" value="${esc(f.protein)}" placeholder="30"></div></div>
+        <div class="field"><label for="f-ingr">What's in it</label><textarea id="f-ingr" data-f="ingredients" placeholder="Main ingredients, separated by commas">${esc(f.ingredients)}</textarea></div>
+        <div class="field"><label for="f-steps">How we make it (one step per line)</label><textarea id="f-steps" data-f="steps" placeholder="Chicken is marinated overnight in yoghurt and spices.">${esc(f.steps)}</textarea></div>
+        <div class="field"><label for="f-good">Good to know</label><textarea id="f-good" data-f="good" placeholder="Why it's a good choice, what to pair it with">${esc(f.good)}</textarea></div>
+        <div class="field"><label for="f-hist">The story behind it</label><textarea id="f-hist" data-f="history" placeholder="Where the dish comes from">${esc(f.history)}</textarea></div>
+      </fieldset>
+      ${S.formErr?`<div class="err" role="alert">${esc(S.formErr)}</div>`:''}
+      <button class="btn" type="submit">Add to ${fmtDay(Dd)} menu</button>
+    </form>`;
+  return `${phaseLine(Dd)}<div class="grid2"><div style="display:grid;gap:12px"><div class="sec-h" style="margin:0"><h3>${fmtDayLong(Dd)}</h3><span class="muted small">${list.filter(d=>d.type==='main').length} mains · ${list.filter(d=>d.type!=='main').length} other items</span></div>${copy}<div class="olist">${rows}</div></div><div>${form}</div></div>`;
+}
+function kMembers(){
+  const t=ymd(now());
+  const rows=S.members.map(m=>{const r=daysBetween(t,m.renews);
+    return `<tr><td><b>${esc(m.name)}</b><div class="muted small">${esc(m.address)}, ${esc(m.postcode)}</div><div class="muted small mono">${esc(m.phone)}</div></td><td>${esc(m.plan)}<div class="muted mono small">${money(m.fee)} / 28 days</div></td>
+    <td><span class="pill ${m.status==='Trial'?'acc':'good'}">${m.status}</span></td><td style="white-space:nowrap">${fmtDay(m.renews)}${r<0?' <span class="pill bad">Ended</span>':r<=3?` <span class="pill warm">${r===0?'Today':'in '+r+'d'}</span>`:''}</td>
+    <td>${m.allergens.length?m.allergens.map(a=>`<span class="pill warm">${a}</span>`).join(' '):'<span class="muted">None</span>'}</td><td class="small">${esc(m.emergency)}</td></tr>`;}).join('');
+  const active=S.members.filter(m=>daysBetween(t,m.renews)>=0);
+  return `<div class="stat-row"><div class="stat"><div class="label">Members</div><div class="v">${active.length}</div></div><div class="stat"><div class="label">On trial</div><div class="v">${active.filter(m=>m.status==='Trial').length}</div></div><div class="stat"><div class="label">Renewing in 3 days</div><div class="v">${S.members.filter(m=>{const r=daysBetween(t,m.renews);return r>=0&&r<=3;}).length}</div></div><div class="stat"><div class="label">Income per 28 days</div><div class="v">${money(active.reduce((s,m)=>s+m.fee,0)).replace('.00','')}</div></div></div>
+  <div class="tbl-wrap"><table><thead><tr><th>Member</th><th>Plan</th><th>Status</th><th>Renews</th><th>Allergies</th><th>Emergency contact</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function prepText(Dd){
+  const os=ordersOn(Dd),L=[`THE DINNER PROJECT · PREP SHEET · ${fmtDayLong(Dd).toUpperCase()}`,`Status: ${PHASE_LABEL[phase(Dd)]}`,''];
+  const cnt={};os.forEach(o=>{[o.main,o.dessert,o.drink].filter(Boolean).forEach(k=>cnt[k]=(cnt[k]||0)+1);Object.entries(o.extras).forEach(([k,q])=>{if(q)cnt[k]=(cnt[k]||0)+q;});});
+  ['main','dessert','drink','snack'].forEach(tp=>{const l=dishesOn(Dd,d=>d.type===tp&&cnt[d.id]);if(l.length){L.push(TYPES[tp].toUpperCase()+'S');l.forEach(d=>L.push(`${cnt[d.id]} × ${d.name} (${d.kitchen})`));L.push('');}});
+  L.push('DELIVERIES 7–8PM');
+  [...os].sort((a,b)=>member(a.member).postcode.localeCompare(member(b.member).postcode)).forEach(o=>{const m=member(o.member);L.push(`- ${m.name}, ${m.address}, ${m.postcode}, ${m.phone} · ${dish(o.main).name}${dish(o.main).spice?' ('+o.spice+')':''}${o.dessert?' · '+dish(o.dessert).name:''}${o.drink?' · '+dish(o.drink).name:''}${Object.entries(o.extras).filter(([,q])=>q).map(([k,q])=>' + '+q+'× '+dish(k).name).join('')}${m.allergens.length?' · ALLERGY: '+m.allergens.join(', '):''}${o.note?' · Note: '+o.note:''}`);});
+  return L.join('\n');
+}
+
+/* ---------- Photos ---------- */
+function readPhoto(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const img=new Image();img.onload=()=>{const k=Math.min(1,900/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.82));};img.onerror=rej;img.src=fr.result;};fr.onerror=rej;fr.readAsDataURL(file);});}
+
+/* ---------- Render + events ---------- */
+function render(){
+  document.getElementById('stage').className='stage '+(S.view==='both'?'both':'only-'+S.view);
+  ['both','member','kitchen'].forEach(v=>document.getElementById('v-'+v).setAttribute('aria-pressed',S.view===v));
+  renderMember();renderKitchen();tickClock();
+}
+function tickClock(){const t=now();let h=t.getHours()%12||12;document.getElementById('clock-now').textContent=`${fmtDayLong(ymd(t))}, ${h}:${pad(t.getMinutes())}:${pad(t.getSeconds())}${t.getHours()>=12?'pm':'am'}`;}
+let toastT;function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2600);}
+function stateKey(){const t=now();return [orderDate(t),ymd(t),t.getHours()>=19,phase(S.kDate||orderDate(t),t),S.kitchenTab==='live'?t.getMinutes():''].join('|');}
+let lastKey='';
+setInterval(()=>{
+  tickClock();
+  document.querySelectorAll('[data-countdown]').forEach(el=>el.textContent=countdown(new Date(+el.dataset.countdown)));
+  const k=stateKey();if(k!==lastKey){lastKey=k;const a=document.activeElement;if(!(a&&a.closest&&a.closest('#dish-form')))render();}
+},1000);
+
+function simulate(Dd){
+  const free=S.members.filter(m=>m.id!==S.me&&!S.orders.some(o=>o.member===m.id&&o.date===Dd));
+  if(!free.length){toast('Every example member has already ordered for this day.');return;}
+  const m=free[Math.floor(Math.random()*free.length)];
+  const pick=l=>{const ok=l.filter(d=>!conflicts(d,m).length);return ok.length?ok[Math.floor(Math.random()*ok.length)].id:null;};
+  const main=pick(includedChoices(Dd,'main')); if(!main){toast('No safe main for that member.');return;}
+  S.orders.push({id:id('o'),member:m.id,date:Dd,main,dessert:pick(includedChoices(Dd,'dessert')),drink:pick(includedChoices(Dd,'drink')),spice:['Mild','Medium','Hot'][Math.floor(Math.random()*3)],note:'',extras:{},placed:+now(),status:'Received'});
+  toast(`New order from ${m.name}`);
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const a=b.dataset.act,Dd=b.dataset.d;
+  if(['pick','spice','note','ostatus','copyfrom','kjump','dphoto','fphoto'].includes(a))return;
+  switch(a){
+    case'view':S.view=b.dataset.v;break;
+    case'clock':{const c=b.dataset.c;
+      if(c==='reset')offset=START-Date.now();
+      else if(c==='758'){const t=now(),g=new Date(t);g.setHours(19,58,0,0);if(g<=t)g.setDate(g.getDate()+1);offset+=g-t;}
+      else offset+=(+c)*60000;
+      S.kDate=null;S.drafts={};S.confirmCancel=null;S.detail=null;break;}
+    case'mtab':S.memberTab=b.dataset.t;S.detail=null;break;
+    case'detail':S.detail=b.dataset.id;S.memberTab='menu';document.getElementById('member').scrollIntoView({block:'start'});break;
+    case'detail-close':S.detail=null;break;
+    case'choose':{draftFor(Dd)[dish(b.dataset.id).type]=b.dataset.id;S.detail=null;toast(`${dish(b.dataset.id).name} chosen`);break;}
+    case'ktab':S.kitchenTab=b.dataset.t;S.delConfirm=null;S.formErr='';break;
+    case'kdate':S.kDate=Dd;S.delConfirm=null;S.formErr='';S.copyFrom='';break;
+    case'lsort':S.liveSort=b.dataset.s;break;
+    case'ex':{const dr=draftFor(Dd);const q=Math.max(0,Math.min(9,(dr.extras[b.dataset.id]||0)+(+b.dataset.n)));if(q)dr.extras[b.dataset.id]=q;else delete dr.extras[b.dataset.id];if(b.dataset.back){S.detail=null;toast(`Added ${dish(b.dataset.id).name}`);}break;}
+    case'confirm':{
+      if(phase(Dd)!=='open'){toast('Orders for this day have closed.');break;}
+      const dr=draftFor(Dd);let o=myOrder(Dd);
+      if(!o){o={id:id('o'),member:S.me,date:Dd,placed:+now(),status:'Received'};S.orders.push(o);toast(`Dinner booked for ${fmtDay(Dd)}`);}
+      else{o.updated=+now();o.placed=+now();toast('Changes saved');}
+      Object.assign(o,{main:dr.main,dessert:dr.dessert,drink:dr.drink,spice:dr.spice,note:dr.note,extras:{...dr.extras}});break;}
+    case'cancel-ask':S.confirmCancel=Dd;break;
+    case'cancel-no':S.confirmCancel=null;break;
+    case'cancel':S.orders=S.orders.filter(o=>!(o.member===S.me&&o.date===Dd));delete S.drafts[Dd];S.confirmCancel=null;toast(`${fmtDay(Dd)} dinner cancelled`);break;
+    case'renew-open':S.renewOpen=true;break;
+    case'renew-close':S.renewOpen=false;break;
+    case'renew':{const m=me();const base=daysBetween(ymd(now()),m.renews)<0?ymd(now()):m.renews;m.renews=addDays(base,28);m.status='Active';S.renewOpen=false;toast(`Renewed until ${fmtDay(m.renews)}`);break;}
+    case'simulate':simulate(Dd);break;
+    case'del-ask':S.delConfirm=b.dataset.id;break;
+    case'del-no':S.delConfirm=null;break;
+    case'del':S.dishes=S.dishes.filter(d=>d.id!==b.dataset.id);S.delConfirm=null;toast('Dish removed');break;
+    case'copymenu':{if(!S.copyFrom)break;const have=new Set(dishesOn(S.kDate).map(d=>d.name.toLowerCase()));let n=0;
+      dishesOn(S.copyFrom).forEach(d=>{if(have.has(d.name.toLowerCase()))return;S.dishes.push({...d,id:id('d'),date:S.kDate,steps:[...d.steps],allergens:[...d.allergens]});n++;});
+      toast(n?`${n} dishes copied to ${fmtDay(S.kDate)}`:'Those dishes are already on this day');S.copyFrom='';break;}
+    case'fphoto-clear':S.form.photo=null;break;
+    case'copy':{const txt=prepText(Dd);try{navigator.clipboard.writeText(txt).then(()=>toast('Prep sheet copied'),()=>toast('Your browser blocked copying'));}catch(_){toast('Your browser blocked copying');}return;}
+    default:return;
+  }
+  render();
+});
+document.addEventListener('change',async e=>{
+  const el=e.target,a=el.dataset.act;
+  if(a==='pick'){draftFor(el.dataset.d)[el.dataset.g]=el.value||null;render();}
+  else if(a==='spice'){draftFor(el.dataset.d).spice=el.value;render();}
+  else if(a==='ostatus'){const o=S.orders.find(x=>x.id===el.dataset.id);o.status=el.value;toast(`${member(o.member).name}: ${el.value}`);render();}
+  else if(a==='copyfrom'){S.copyFrom=el.value;render();}
+  else if(a==='kjump'){if(el.value){S.kDate=el.value;render();}}
+  else if(a==='dphoto'||a==='fphoto'){const f=el.files&&el.files[0];if(!f)return;
+    try{const url=await readPhoto(f);if(a==='dphoto'){dish(el.dataset.id).photo=url;toast('Photo added');}else S.form.photo=url;render();}catch(_){toast("That file couldn't be read as an image.");}}
+  else if(el.closest('#dish-form')){
+    if(el.dataset.al){const s=new Set(S.form.allergens);el.checked?s.add(el.dataset.al):s.delete(el.dataset.al);S.form.allergens=[...s];}
+    else if(el.dataset.f){S.form[el.dataset.f]=el.type==='checkbox'?el.checked:el.value;if(['type','exclusive'].includes(el.dataset.f)){if(el.dataset.f==='type'){if(el.value==='drink')S.form.kitchen='Bought in';if(el.value==='snack')S.form.exclusive=false;}render();}}
+  }
+});
+document.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.dataset.act==='note')draftFor(el.dataset.d).note=el.value;
+  else if(el.closest&&el.closest('#dish-form')&&el.dataset.f&&el.type!=='checkbox')S.form[el.dataset.f]=el.value;
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='dish-form')return;
+  e.preventDefault();
+  const f=S.form,name=f.name.trim(),fail=m=>{S.formErr=m;render();};
+  if(!name)return fail('Enter a dish name.');
+  if(dishesOn(S.kDate).some(d=>d.name.toLowerCase()===name.toLowerCase()))return fail(`${name} is already on this day's menu.`);
+  const max=parseInt(f.max,10);if(!(max>0))return fail('Set how many portions you can make.');
+  const d={id:id('d'),date:S.kDate,type:f.type,name,kitchen:f.kitchen,cuisine:f.cuisine.trim(),diet:f.diet,allergens:[...f.allergens],max,exclusive:f.type!=='snack'&&!!f.exclusive,spice:f.type==='main'&&!!f.spice,
+    kcal:f.kcal===''?null:+f.kcal,protein:f.protein===''?null:+f.protein,ingredients:f.ingredients.trim(),steps:f.steps.split('\n').map(s=>s.trim()).filter(Boolean),good:f.good.trim(),history:f.history.trim(),photo:f.photo,story:''};
+  if(d.type==='main'&&!d.exclusive)d.extraPrice=Math.max(0,parseFloat(f.extraPrice)||0);else d.price=Math.max(0,parseFloat(f.price)||0);
+  S.dishes.push(d);S.formErr='';S.form={...emptyForm(),type:f.type,kitchen:f.kitchen};
+  toast(`${name} added to ${fmtDay(S.kDate)}`);render();
+});
+
+S.kDate=orderDate();lastKey=stateKey();render();
+</script>
+
+</body></html>
